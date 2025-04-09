@@ -4,50 +4,59 @@ let flowprev=1
 let names = ["sunflower" , "tulip"]
 let y = 40
 
+//KEY: HN9TUQGX2II5XAY3
+
 function preload() {
   data = loadJSON("flower.json");
-  catData = 
-  loadJSON('https://catfact.ninja/fact');
+  catData = loadJSON('https://catfact.ninja/fact');
+  stockData = loadJSON('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=HN9TUQGX2II5XAY3');
 }
 
 function setup() {
   createCanvas(400, 400);
   background(200);
   
-  console.log(catData.fact)
-  catFact = catData.fact
+  // Print the stock data to see the structure
+  console.log(stockData);
+  
+  // Access the "Time Series (5min)" section
+  let timeSeries = stockData["Time Series (5min)"];
 
-  let flowers = data.flowers;
-  
-  for(let o = 0; o<2; o++){
-  for(let n = 0; n<2; n++){
-  
-  // if(flowprev=0){
-  // floww = 1
-  // }
-  // if(flowprev=1){
-  //   floww = 0
-  //   } 
-  //   flowprev = floww 
-    y=y+50 
-    fill(flowers[n].r,flowers[n].g,flowers[n].b);
-  ellipse(y,150,150,150);
-  stroke(0);
-  textSize(22);
-  text(flowers[n].name, y, 150);
-  textSize(14)
-  text(catFact, 100,100)
+  // Loop through the time series data
+  for (let timestamp in timeSeries) {
+    if (timeSeries.hasOwnProperty(timestamp)) {
+      let stockInfo = timeSeries[timestamp]; // This contains the open, high, low, close, volume
+      console.log("Timestamp: " + timestamp); // This is the timestamp
+      console.log("Stock data: ", stockInfo); // This is the stock data at that timestamp
+    }
   }
 }
+
+
+
+function draw() {
+  background(200);  // Clear the canvas on each frame
+  
+  textFont('Arial');
+  fill("white");
+  textSize(14);
+
+  let yOffset = 20;  // Start y-position for displaying data
+  let stockSeries = stockData["Time Series (5min)"];  // Extract the time series data
+
+  // Loop through the time series and display timestamps and corresponding stock data
+  for (let timestamp in stockSeries) {
+    let stockInfo = stockSeries[timestamp];
+    let openPrice = stockInfo["1. open"];
+    let closePrice = stockInfo["4. close"];
+    let volume = stockInfo["5. volume"];
+
+    // Display the timestamp and stock data as text on the canvas
+    text(`Time: ${timestamp}`, 10, yOffset);
+    text(`Open: ${openPrice}`, 10, yOffset + 20);
+    text(`Close: ${closePrice}`, 10, yOffset + 40);
+    text(`Volume: ${volume}`, 10, yOffset + 60);
+
+    yOffset += 80;  // Increment yOffset to avoid overlap for each entry
+  }
 }
-
-function draw(){
-  textFont('Arial')
-  fill ("white")
-  textSize(14)
-    text(catFact, 100,100)
-
-}
-
-
-
