@@ -3,6 +3,10 @@ let floww=2
 let flowprev=1
 let names = ["sunflower" , "tulip"]
 let y = 40
+let fakeopen = 100
+let fakeclose = 110
+let fakevolume = 12000
+let stocknum = 10
 
 //KEY: HN9TUQGX2II5XAY3
 
@@ -61,7 +65,7 @@ function draw() {
 
   //   yOffset += 80;  // Increment yOffset to avoid overlap for each entry
   // }
-  let stockInfo = stockSeries["2025-04-10 14:05:00"];
+  let stockInfo = stockSeries["2025-05-12 14:05:00"];
   let openPrice = stockInfo["1. open"];
   let closePrice = stockInfo["4. close"];
   let volume = stockInfo["5. volume"];
@@ -69,4 +73,21 @@ function draw() {
   text(`Open: ${openPrice}`, 10, yOffset + 20);
   text(`Close: ${closePrice}`, 10, yOffset + 40);
   text(`Volume: ${volume}`, 10, yOffset + 60);
+  
+  for (let i = 1; i < stocknum; i += 1) {
+
+  let stockInfo = stockSeries["2025-05-12 14:00:00"];
+  let openPrice = stockInfo["1. open"];
+  let closePrice = stockInfo["4. close"];
+  let volume = stockInfo["5. volume"];
+
+  stroke('magenta')
+  strokeWeight(5);
+  line((50*i),(100-((closePrice)/5)), (50*i), 200)
+  }
 } 
+
+ /// function Graph(){
+ ///   rect(1,124,134)
+
+///  }
