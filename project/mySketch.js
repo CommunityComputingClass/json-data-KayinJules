@@ -6,7 +6,8 @@ let y = 40
 let fakeopen = 100
 let fakeclose = 110
 let fakevolume = 12000
-let stocknum = 10
+let stocknum = 4
+let timekey = 1
 
 //KEY: HN9TUQGX2II5XAY3
 
@@ -40,6 +41,10 @@ function setup() {
 
 
 
+
+
+
+
 function draw() {
   background(200);  // Clear the canvas on each frame
   
@@ -65,7 +70,7 @@ function draw() {
 
   //   yOffset += 80;  // Increment yOffset to avoid overlap for each entry
   // }
-  let stockInfo = stockSeries["2025-05-12 14:05:00"];
+  let stockInfo = stockSeries["2025-05-14 18:05:00"];
   let openPrice = stockInfo["1. open"];
   let closePrice = stockInfo["4. close"];
   let volume = stockInfo["5. volume"];
@@ -76,17 +81,43 @@ function draw() {
   
   for (let i = 1; i < stocknum; i += 1) {
 
-  let stockInfo = stockSeries["2025-05-12 14:00:00"];
+    //let timeKey = `2025-05-14 10:${String(i * 5).padStart(2, '0')}:00`;
+    // Ensure stockInfo exists for the given timeKey
+    //let stockInfo = stockSeries[timeKey];
+ 
+  let stockInfo = stockSeries[timeSeries[i]];
   let openPrice = stockInfo["1. open"];
   let closePrice = stockInfo["4. close"];
   let volume = stockInfo["5. volume"];
 
   stroke('magenta')
   strokeWeight(5);
-  line((50*i),(100-((closePrice)/5)), (50*i), 200)
+  line((50*i),(((closePrice)-260)*50), (50*i), (((closePrice)-260)*50)+20)
   }
+
+  
 } 
 
+
+
+function generateTimeSeries(startTime, intervals) {
+  const timeSeries = [];
+  let currentTime = new Date(startTime);
+
+  for (let i = 0; i < intervals; i++) {
+    const timeKey = currentTime.toISOString().slice(0, 19).replace("T", " ");
+    timeSeries.push(timeKey);
+    currentTime.setMinutes(currentTime.getMinutes() + 5);
+  }
+
+  return timeSeries;
+}
+
+// Example usage:
+const startTime = "2025-05-14T11:20:00";
+const intervals = 6;
+const timeSeries = generateTimeSeries(startTime, intervals);
+console.log(timeSeries);
  /// function Graph(){
  ///   rect(1,124,134)
 
